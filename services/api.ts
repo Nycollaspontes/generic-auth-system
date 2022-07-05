@@ -18,7 +18,7 @@ export const api = axios.create({
 
 api.interceptors.response.use(response => {
     return response;
-}, (error: AxiosError) => {
+}, (error) => {
     // console.log(error.response.status)
     // console.log(error.response)
     if (error.response.status = 401) {
@@ -46,7 +46,6 @@ api.interceptors.response.use(response => {
                         maxAge: 60 * 60 * 24 * 30, //30 days,
                         path: '/',
                     })
-                    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
                     failedRequestQueue.forEach(request => request.onSucess(token))
                     failedRequestQueue = [];
