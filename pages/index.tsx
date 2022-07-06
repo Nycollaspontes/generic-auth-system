@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import { FormEvent, useContext, useState } from 'react'
 import { AuthContext } from '../context/Auth.Context'
 import styles from '../styles/Home.module.css'
+import { WithSSR } from '../utils/withSSRGuest'
 
 const Home: NextPage = () => {
 
@@ -32,5 +33,17 @@ const Home: NextPage = () => {
   </div>
   )
 }
-
 export default Home
+
+
+
+export const getServerSideProps = WithSSR (async (ctx) => {
+
+  return {
+    props: {
+      
+    }
+  }
+
+
+});

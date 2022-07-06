@@ -1,6 +1,8 @@
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../context/Auth.Context";
-import { api } from "../services/api";
+import { api } from "../services/apiClient";
+
+import { WithSSRAuth } from "../utils/withSSRAuth";
 
 export default function Dashboard(){
 
@@ -20,3 +22,14 @@ export default function Dashboard(){
         </div>
     )
 }
+
+
+export const getSeverSideProps = WithSSRAuth(async (ctx) =>  {
+    const response = await api.get('/me');
+
+    console.log(response);
+
+return {
+    props:{}
+}
+})
