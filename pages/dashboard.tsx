@@ -4,11 +4,14 @@ import { api } from "../services/apiClient";
 import { setupAPIClient } from "../services/api";
 
 import { WithSSRAuth } from "../utils/withSSRAuth";
-import { AuthTokentError } from "../services/errors/AuthTokenError";
-import { destroyCookie } from "nookies";
+import { useCan } from "../hooks/canUse";
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
+
+  const userCanSeeMetrics = useCan({
+    roles: ['administrator' , 'editor']
+  })
 
   useEffect(() => {
     api
@@ -21,6 +24,9 @@ export default function Dashboard() {
   return (
     <div>
       <h1>Dashboard {user?.email}</h1>
+      <div>
+        {userCanSeeMetrics && <h1>Metricas</h1>}
+      </div>
     </div>
   );
 }
@@ -28,22 +34,12 @@ export default function Dashboard() {
 export const getServerSideProps = WithSSRAuth(async (ctx) => {
 
   const apiClient = setupAPIClient(ctx);
-  try {
-    const response = await apiClient.get("/me");
-  }
-  catch (err) {
-    destroyCookie(ctx,'nextauth.token')
-    destroyCookie(ctx,'nextauth.refreshToken')
-    
-    console.log(err);
-    return {
-      redirect: {
-        destination: '/',
-        permanent : false,
-      }
-    }
-  }
+  const response = await apiClient.get("/me");
+
+  console.log(response.data);
   return {
-    props: {},
+    props: {
+
+    },
   }
 });

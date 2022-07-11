@@ -90,7 +90,7 @@ export function setupAPIClient(ctx = undefined) {
         if (typeof window !== "undefined") {
           signOut();
         } else {
-          return
+          return Promise.reject(new AuthTokentError())
         }
       }
 
